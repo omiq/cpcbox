@@ -8,15 +8,16 @@
 		<link rel="icon" href="img/favicon32.ico" type="image/x-icon" />
 	
 		<title>Amstrad CPC emulator in Javascript</title>
-		<link rel="stylesheet" type="text/css" href="css/cpcbox.style.css" />
-		<link rel="stylesheet" type="text/css" href="css/volume-slider.css" />
+		<link rel="stylesheet" type="text/css" href="css/cpcbox.style.css?v=20241221" />
+		<link rel="stylesheet" type="text/css" href="css/volume-slider.css?v=20241221" />
 		
-		<script type="text/javascript" src="libs/jquery-1.8.3.min.js"></script>
-		<script type="text/javascript" src="libs/jquerytools.rangeinput.js"></script>
-		<script type="text/javascript" src="libs/inflate.js"></script>
+		<script type="text/javascript" src="libs/jquery-1.8.3.min.js?v=20241221"></script>
+		<script type="text/javascript" src="libs/jquerytools.rangeinput.js?v=20241221"></script>
+		<script type="text/javascript" src="libs/inflate.js?v=20241221"></script>
 		
-		<script type="text/javascript" src="cpcbox.sysroms.js"></script>
-		<script type="text/javascript" src="cpcbox.js"></script>
+		<script type="text/javascript" src="cpcbox.sysroms.js?v=20241221"></script>
+		<script type="text/javascript" src="cpcbox.js?v=20241221"></script>
+		<script type="text/javascript" src="autostart-config.js?v=20241221"></script>
 		
 	</head>
 	
@@ -134,11 +135,11 @@
 					</div>
 				</div>
 			</div>	
-			<div id="status">Paused</div>
+			<div id="status">Loading...</div>
 			
 			<div class="control-panel">
 				<select id="snapshot" rows="1" autocomplete="off">
-					<option value="none">Choose configuration...</option>
+					<option value="boot_cpc464">Choose configuration...</option>
 					<optgroup label="Boot">
 						<option value="boot_cpc464">CPC 464</option>
 						<option value="boot_cpc664">CPC 664</option>
@@ -233,5 +234,29 @@
 				<div><i>CPC joystick mapped to Ctrl, Alt and arrow keys.</i></div>
 			</div>
 		</div>
+		
+		<!-- Auto-start script -->
+		<script type="text/javascript">
+		$(document).ready(function() {
+			if (typeof AUTO_START_ENABLED !== 'undefined' && AUTO_START_ENABLED) {
+				// Set the dropdown to the auto-start configuration
+				$('#snapshot').val(AUTO_START_CONFIG);
+				
+				// Update status to show auto-start is happening
+				var message = (typeof AUTO_START_MESSAGE !== 'undefined') ? AUTO_START_MESSAGE : 'Auto-starting...';
+				$('#status').text(message);
+				
+				// Auto-start after a short delay to ensure everything is loaded
+				var delay = (typeof AUTO_START_DELAY !== 'undefined') ? AUTO_START_DELAY : 2000;
+				setTimeout(function() {
+					// Trigger the change event to start the emulator
+					$('#snapshot').trigger('change');
+				}, delay);
+			} else {
+				// If auto-start is disabled, show the normal paused status
+				$('#status').text('Paused');
+			}
+		});
+		</script>
 	</body>
 </html>
