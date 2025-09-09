@@ -166,7 +166,7 @@ button {
 	font-size: 14px;
 }
 .drive-controls {
-	margin: 16px 0;
+	/* margin: 16px 0; */
 	display: flex;
 	flex-wrap: wrap;
 	gap: 8px;
@@ -174,14 +174,14 @@ button {
 }
 
 .control-panel {
-	padding: 16px 0;
+	/* padding: 16px 0; */
 	background-color: #ffffff;
 	border-radius: 8px;
-	margin: 16px 0;
+	/* margin: 16px 0; */
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 #option-panel {
-	width: 600px;
+	width: 450px;
 	max-height: 85vh;
 	left: 50%;
 	top: 50%;
@@ -189,7 +189,7 @@ button {
 	margin-top: -42.5vh;
 	position: fixed;
 	background-color: white;
-	padding: 24px;
+	padding: 24px 24px 24px 24px;
 	border: none;
 	border-radius: 12px;
 	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
@@ -268,24 +268,24 @@ button {
 .option-list {
 	margin: 0 0 16px 0;
 	display: grid;
-	grid-template-columns: 1fr 1fr;
+	grid-template-columns: 5% 95%;
 	gap: 10px 20px;
 	max-width: 100%;
 }
 
 /* Three columns for checkboxes (peripherals) */
 .option-list:has(input[type="checkbox"]) {
-	grid-template-columns: 1fr 1fr 1fr !important;
+	grid-template-columns: 50% 50% !important;
 }
 
 /* Fallback for browsers that don't support :has() */
 .option-list.peripherals {
-	grid-template-columns: 1fr 1fr 1fr !important;
+	grid-template-columns: 50% 50% !important;
 }
 
 /* Additional specific selector for peripherals */
 #option-panel .option-list.peripherals {
-	grid-template-columns: 1fr 1fr 1fr !important;
+	grid-template-columns: 50% 50% !important;
 	display: grid !important;
 }
 
@@ -510,7 +510,7 @@ button {
 	transition: all 0.2s ease;
 	gap: 6px;
 	border: 1px solid transparent;
-	width: 100%;
+	width: 80%;
 	box-sizing: border-box;
 }
 
@@ -584,7 +584,7 @@ input[type="checkbox"]:checked + .option-label {
 	display: inline-block;
 	position: relative;
 	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-	margin-top: 16px;
+	/* margin-top: 16px; */
 	border-radius: 12px;
 	overflow: hidden;
 }

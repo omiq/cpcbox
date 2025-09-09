@@ -9,7 +9,7 @@
 	<link rel="icon" href="img/favicon32.ico" type="image/x-icon">
 	<title>Amstrad CPC emulator in Javascript</title>
 	
-	<link rel="stylesheet" type="text/css" href="css/cpcbox.style.css?v=20241225">
+	<link rel="stylesheet" type="text/css" href="css/cpcbox.style.css?v=20241226">
 	<link rel="stylesheet" type="text/css" href="css/volume-slider.css?v=20241222">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
 	
@@ -28,8 +28,78 @@
 	</noscript>
 	
 	<div id="error-log" class="error-output" style="display:none"></div>
-	
+	<div id="status" style="display:none">Loading...</div>
 	<div class="main-panel">
+		<div class="control-panel">
+			<a target="_blank" href="https://retrogamecoders.com/amstrad-cpc-emulator">Amstrad CPC Emulator</a>
+			<select id="snapshot" autocomplete="off">
+				<option value="boot_cpc6128">Choose configuration...</option>
+				<optgroup label="Boot">
+					<option value="boot_cpc464">CPC 464</option>
+					<option value="boot_cpc664">CPC 664</option>
+					<option value="boot_cpc6128">CPC 6128</option>
+				</optgroup>
+				<optgroup label="Oh Mummy">
+					<option value="oh-mummy-slow-easy.sna">Slow and Easy (no sound)</option>
+				</optgroup>
+				<optgroup label="Games">
+					<option value="1943.sna">1943</option>
+					<option value="arkanoid.sna">Arkanoid</option>
+					<option value="astro_marine_corps.sna">Astro Marine Corps</option>
+					<option value="batman.sna">Batman</option>
+					<option value="bomb_jack.sna">Bomb Jack</option>
+					<option value="boulder_dash.sna">Boulder Dash</option>
+					<option value="bruce_lee.sna">Bruce Lee</option>
+					<option value="buggy_boy.sna">Buggy Boy</option>
+					<option value="chase_hq.sna">Chase HQ</option>
+					<option value="commando.sna">Commando</option>
+					<option value="cybernoid.sna">Cybernoid</option>
+					<option value="donkey_kong.sna">Donkey Kong</option>
+					<option value="dragon_ninja.sna">Dragon Ninja</option>
+					<option value="fruity_frank.sna">Fruity Frank</option>
+					<option value="ghosts_n_goblins.sna">Ghosts'n Goblins</option>
+					<option value="great_courts.sna">Great Courts</option>
+					<option value="gryzor.sna">Gryzor</option>
+					<option value="head_over_heels.sna">Head Over Heels</option>
+					<option value="ikari_warriors.sna">Ikari Warriors</option>
+					<option value="live_and_let_die.sna">Live and Let Die</option>
+					<option value="prohibition.sna">Prohibition</option>
+					<option value="rick_dangerous.sna">Rick Dangerous</option>
+					<option value="target_renegade.sna">Target Renegade</option>
+					<option value="tetris_95.sna">Tetris 95</option>
+					<option value="wonder_boy.sna">Wonder Boy</option>
+				</optgroup>
+				<optgroup label="Demos">
+					<option value="backtro.sna">Backtro</option>
+					<option value="dtc.sna">DTC</option>
+					<option value="ecole_buissonniere.sna">Ecole Buissonnière</option>
+					<option value="from_scratch.sna">From Scratch</option>
+					<option value="tire_au_flan.sna">Tire Au Flan</option>
+					<option value="wolfenstrad.sna">Wolfenstrad</option>
+				</optgroup>
+			</select>
+			
+			<div id="button-run" class="button-size1 disabled-button">
+				<i class="fas fa-play"></i> Resume
+			</div>
+			<div id="button-reset" title="Reset CPC" class="button-size1 disabled-button">
+				<i class="fas fa-power-off"></i>
+			</div>
+			<div id="checkbox-settings" title="Settings">
+				<i class="fas fa-cog"></i>
+			</div>
+			<div id="checkbox-fullscreen" title="Fullscreen">
+				<i class="fas fa-expand"></i>
+			</div>
+			<div id="checkbox-joystick" title="Disable CPC joystick">
+				<i class="fas fa-gamepad"></i>
+			</div>
+			<div id="checkbox-sound" title="Unmute">
+				<i class="fas fa-volume-up"></i>
+			</div>
+			<input type="range" name="sound-volume" min="1" max="100" value="75" style="display:none">
+		
+		</div>
 		<div id="screen-placeholder">
 			<div id="logo"></div>
 			<canvas id="screen" width="768" height="272" style="display:none"></canvas>
@@ -136,26 +206,30 @@
 						</label>
 					</div>
 					
+					
+				
 					<div class="option-heading">Peripherals</div>
 					<div class="option-list peripherals">
-						<input type="checkbox" id="floppy-option">
-						<label for="floppy-option" class="option-label">
-							<div class="option-name">Extra floppy drive</div>
-						</label>
-						<input type="checkbox" id="tape-option">
-						<label for="tape-option" class="option-label">
-							<div class="option-name">Tape deck</div>
-						</label>
-						<input type="checkbox" id="ram-option">
-						<label for="ram-option" class="option-label">
-							<div class="option-name">512KB RAM expansion</div>
-						</label>
+						<div class="peripheral-item">
+							<input type="checkbox" id="floppy-option">
+							<label for="floppy-option" class="option-label">
+								<div class="option-name">Extra floppy drive</div>
+							</label>
+						</div>
+							<input type="hidden" id="tape-option" style="visibility: hidden;">
+						
+						<div class="peripheral-item">
+							<input type="checkbox" id="ram-option">
+							<label for="ram-option" class="option-label">
+								<div class="option-name">512KB RAM expansion</div>
+							</label>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 		
-		<div id="status">Loading...</div>
+		
 		
 		<!-- Drive controls - moved above the fold -->
 		<div class="drive-controls">
@@ -199,81 +273,6 @@
 				<div id="driveb-led" class="led"></div>
 				<div id="driveb-eject" class="button-size2 disabled-button"><i class="fas fa-eject"></i></div>
 			</fieldset>
-		</div>
-		
-		<div class="control-panel">
-			<select id="snapshot" autocomplete="off">
-				<option value="boot_cpc464">Choose configuration...</option>
-				<optgroup label="Boot">
-					<option value="boot_cpc464">CPC 464</option>
-					<option value="boot_cpc664">CPC 664</option>
-					<option value="boot_cpc6128">CPC 6128</option>
-				</optgroup>
-				<optgroup label="Oh Mummy">
-					<option value="oh-mummy-slow-easy.sna">Slow and Easy (no sound)</option>
-				</optgroup>
-				<optgroup label="Games">
-					<option value="1943.sna">1943</option>
-					<option value="arkanoid.sna">Arkanoid</option>
-					<option value="astro_marine_corps.sna">Astro Marine Corps</option>
-					<option value="batman.sna">Batman</option>
-					<option value="bomb_jack.sna">Bomb Jack</option>
-					<option value="boulder_dash.sna">Boulder Dash</option>
-					<option value="bruce_lee.sna">Bruce Lee</option>
-					<option value="buggy_boy.sna">Buggy Boy</option>
-					<option value="chase_hq.sna">Chase HQ</option>
-					<option value="commando.sna">Commando</option>
-					<option value="cybernoid.sna">Cybernoid</option>
-					<option value="donkey_kong.sna">Donkey Kong</option>
-					<option value="dragon_ninja.sna">Dragon Ninja</option>
-					<option value="fruity_frank.sna">Fruity Frank</option>
-					<option value="ghosts_n_goblins.sna">Ghosts'n Goblins</option>
-					<option value="great_courts.sna">Great Courts</option>
-					<option value="gryzor.sna">Gryzor</option>
-					<option value="head_over_heels.sna">Head Over Heels</option>
-					<option value="ikari_warriors.sna">Ikari Warriors</option>
-					<option value="live_and_let_die.sna">Live and Let Die</option>
-					<option value="prohibition.sna">Prohibition</option>
-					<option value="rick_dangerous.sna">Rick Dangerous</option>
-					<option value="target_renegade.sna">Target Renegade</option>
-					<option value="tetris_95.sna">Tetris 95</option>
-					<option value="wonder_boy.sna">Wonder Boy</option>
-				</optgroup>
-				<optgroup label="Demos">
-					<option value="backtro.sna">Backtro</option>
-					<option value="dtc.sna">DTC</option>
-					<option value="ecole_buissonniere.sna">Ecole Buissonnière</option>
-					<option value="from_scratch.sna">From Scratch</option>
-					<option value="tire_au_flan.sna">Tire Au Flan</option>
-					<option value="wolfenstrad.sna">Wolfenstrad</option>
-				</optgroup>
-			</select>
-			
-			<div id="button-run" class="button-size1 disabled-button">
-				<i class="fas fa-play"></i> Resume
-			</div>
-			<div id="button-reset" title="Reset CPC" class="button-size1 disabled-button">
-				<i class="fas fa-power-off"></i>
-			</div>
-			<div id="checkbox-settings" title="Settings">
-				<i class="fas fa-cog"></i>
-			</div>
-			<div id="checkbox-fullscreen" title="Fullscreen">
-				<i class="fas fa-expand"></i>
-			</div>
-			<div id="checkbox-joystick" title="Disable CPC joystick">
-				<i class="fas fa-gamepad"></i>
-			</div>
-			<div id="checkbox-sound" title="Unmute">
-				<i class="fas fa-volume-up"></i>
-			</div>
-			<input type="range" name="sound-volume" min="1" max="100" value="75" style="display:none">
-		
-		</div>
-		
-		<div id="browser-nfo" class="nfo">
-			<div><a target="_blank" href="/about.html">About CPCBox</a></div>
-			<div><i>CPC joystick mapped to Ctrl, Alt and arrow keys.</i></div>
 		</div>
 	</div>
 	
